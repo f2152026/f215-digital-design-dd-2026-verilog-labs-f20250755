@@ -64,28 +64,7 @@ module cla64_flat(
   // cla64_flat.v
 // A flat, unblocked 64-bit carry-lookahead adder.
 
-module cla64_flat(
-  input  [63:0] a,
-  input  [63:0] b,
-  input         cin,
-  output [63:0] sum,
-  output        cout
-);
 
-  wire [63:0] p, g;
-  wire [64:1] c;   // c[1]..c[64] are the 64 carries; cin is c[0]
-
-  // ---------------------------------------------------------------------
-  // Step 1: generate/propagate signals
-  // ---------------------------------------------------------------------
-
-  genvar i;
-  generate
-    for (i = 0; i < 64; i = i + 1) begin : gen_pg
-      xor #(2) (p[i], a[i], b[i]);
-      and #(2) (g[i], a[i], b[i]);
-    end
-  endgenerate
 
   // ---------------------------------------------------------------------
   // Step 2: direct carry equations
@@ -177,7 +156,7 @@ module cla64_flat(
 
   assign cout = c[64];
 
-endmodule
+
 
 
 
@@ -185,3 +164,5 @@ endmodule
   // Step 3: sum bits
   // ---------------------------------------------------------------------
    assign #(2) sum = p ^ {c[63:1], cin};
+
+endmodule
